@@ -10,29 +10,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/math")
 public class MathController {
 
-    @GetMapping("/sum/{strNumber1}/{strNumber2}")
-    public Double sum(
-            @PathVariable("strNumber1") String strNumber1,
-            @PathVariable("strNumber2") String strNumber2
+    @GetMapping("/sum/{number1}/{number2}")
+    public Double sum(@PathVariable("number1") String strNumber1, @PathVariable("number2") String strNumber2) {
 
-    ) throws Exception {
         if (!isNumeric(strNumber1) || !isNumeric(strNumber2)) {
-            throw new UnsupportedMathOperationException("");
+            throw new UnsupportedMathOperationException("set a numeric value");
         }
         return convertToDouble(strNumber1) + convertToDouble(strNumber2);
     }
 
     private Double convertToDouble(String strNumber) {
-        if (strNumber == null) return 0D;
         String number = strNumber.replaceAll(",", ".");
-        if (isNumeric(number)) return Double.parseDouble(number);
-        return 0D;
+        return Double.parseDouble(number);
     }
 
     private boolean isNumeric(String strNumber) {
-        if (strNumber == null) return false;
-        String number = strNumber.replaceAll(",", ".");
-        return number.matches("[+-]?[0-9]*\\.?[0-9]+");
+        if (strNumber == null || strNumber.isEmpty()) return false;
+        return strNumber.replaceAll(",", ".").matches("[+-]?[0-9]*\\.?[0-9]+");
     }
 }
 
